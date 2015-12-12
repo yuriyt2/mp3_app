@@ -80,13 +80,12 @@ app.listen(3000,function(){console.log("Server Running on 3000")});
       })
   })
 //
-//   app.put('/users', function (req, res) {
-//     console.log("put route session id : " + req.session.currentUser);
-//     User.findById(req.session.currentUser).populate('posts').exec(function (err, user) {
-//       console.log(user)
-//       user.addPost(req, res)
-//     });
-//   });
+  app.put('/users', function (req, res) {
+    console.log(req.body)
+    var user = User.findById(req.session.currentUser)
+    user.songs = req.body.params
+    user.save()
+  });
 
 // app.get('/sessions', function(req,res){
 //   console.log(req.session)

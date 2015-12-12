@@ -293,29 +293,108 @@ var getSongFileNames = function () {
   }).fail(function(err) {
     console.log(err);
   })
-
+  //setTimeout(function(){makeSongObjects(songFileNames)},10000)
 }
 
 //The 2nd step to adding songs is to turn all the paths into song objects.
 var makeSongObjects = function (array) {
   for (var i = 0; i < array.length; i++) {
     songObjects.push({id:i+1,filepath:array[i],tempUrl:null,artist:null,title:null,album:null,year:null})
+    console.log(songObjects.length)
   }
-  return songObjects //use these to send to addTempLinks
+  console.log("Song Objects Made")
+  //addTempLinks(songObjects)
+}
+
+// Add temp links to all the song objects.
+var addTempLinks = function (array,num){
+  if (num == array.length){
+    console.log('Temp links added!')
+    updateUserSongList()
+  }else{
+  var link = ""
+  $.ajax({
+    url: 'https://api.dropboxapi.com/1/media/auto' + array[num].filepath,
+    dataType: "json",
+    method: 'POST',
+    headers: {'Authorization': 'Bearer ' + token}
+  }).done(function(data){
+      console.log("link created" + data.url)
+      array[num].tempUrl = data.url
+      addTempLinks(array,num+1)
+  })
+    .fail(function(err) {
+      console.log(err);
+  })
 }
 
 
 
+  // array.forEach(function(song){
+  //   var path = makeNewTempLink(song.filepath);
+  //   song.tempUrl = path;
+  //   console.log(path + song.filepath + song.tempUrl)
+  // })
+  //
+  // console.log("Temp Links Added")
+  //setTimeout(updateSongList,300000)
+}
 
-var makeNewTempLink = function (song) {
+// Create temporary dropbox url to each song.  Can be used to play or to read ID3 tags.
+var makeNewTempLink = function (path) {
+  var link = ""
+  $.ajax({
+    url: 'https://api.dropboxapi.com/1/media/auto' + path,
+    dataType: "json",
+    method: 'POST',
+    headers: {'Authorization': 'Bearer ' + token}
+  }).done(function(data){
+      console.log("link created" + data.url)
+      link = data.url
+      return link
+  })
+    .fail(function(err) {
+      console.log(err);
+  })
 
 }
 
-var addTempLinks = function (array){
-  array.forEach()
-}
+
 
 
 var updateUserSongList = function () {
+  userSongList.forEach(function(song){
+    id3(song.tempUrl, function(err, tags) {
+        song.title = tags.title;
+        song.artist = tags.artist;
+        song.year = tags.year;
+        song.album = tags.album;
+      })
+      console.log("user song list updated")
+//    saveUserSongs();
+//    updateSongList();
+  })
+}
 
+var saveUserSongs = function () {
+  $.ajax({
+    url: "/users",
+    method: "PUT",
+    songs: userSongList
+  }).success(function(){
+    console.log("success")
+  }).fail(function(){
+    console.log("fail")
+  })
+  console.log("user songs saved")
+}
+
+var updateSongList = function (){
+  userSongList.forEach(function(song){
+    var $song = $('<option>');
+    $song.attr('value',song.id);
+    $song.text(song.artist + " - " + song.title);
+    $songList.append($song);
+  })
+console.log("song list updated front end")
 }
