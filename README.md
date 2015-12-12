@@ -1,5 +1,5 @@
-# mp3 app
-## An app that plays MP3s from remote locations.
+# MP3 APP
+## An application that plays MP3s from cloud storage.
 
 -This app will require users to sign up for a cloud storage service (dropbox, google drive, ftp server).
 

@@ -88,8 +88,18 @@ app.listen(3000,function(){console.log("Server Running on 3000")});
 //     });
 //   });
 
-app.post('/sessions', function(req,res){
+// app.get('/sessions', function(req,res){
+//   console.log(req.session)
+//   if (req.session.currentUser){
+//     console.log(req.session.currentUser)
+//     res.send("User logged in.")
+//   } else {
+//     res.sendFile(__dirname + "/public/index.html")
+//     //res.sendStatus(400)
+//   }
+// })
 
+app.post('/sessions', function(req,res){
   User.find({
      username: req.body.username
    }).exec(function(err, user) {
