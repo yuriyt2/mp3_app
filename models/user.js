@@ -7,15 +7,7 @@ var UserSchema = new mongoose.Schema({
   username: String,
   password: String,
   token: String,
-  songs: [{
-    id: String,
-    filepath: String,
-    tempUrl: String,
-    artist: String,
-    title: String,
-    album: String,
-    year: String
-  }]
+  songs: []
 });
 
 UserSchema.pre('save', function (next) {
