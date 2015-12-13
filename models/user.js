@@ -7,7 +7,15 @@ var UserSchema = new mongoose.Schema({
   username: String,
   password: String,
   token: String,
-  songs: []
+  songs: [{
+    id: String,
+    filepath: String,
+    tempUrl: String,
+    artist: String,
+    title: String,
+    album: String,
+    year: String
+  }]
 });
 
 UserSchema.pre('save', function (next) {

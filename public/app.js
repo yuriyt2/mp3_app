@@ -12,9 +12,11 @@ var $songList = $('#song-list');
 var $addSongButton = $('#add-song-button');
 var $playlistSelect = $('#playlist');
 
-//dropbox
+//Dropbox
 var $updateSongs = $('#update-songs')
 
+//User variables
+var loggedInUser = "";
 var userToken = "";
 var userSongList = [];
 var playList = [];
@@ -40,7 +42,10 @@ $(function(){
       username:$('#user-input').val(),
       password:$('#password-input').val()
     })
-      .success(userLoggedIn)
+      .success(function(usr){
+        loggedInUser = usr[0]
+        userLoggedIn(usr)
+      })
       .fail(function(err) {
         var errorMessage = $('<div>')
         errorMessage.html(err)
@@ -68,9 +73,9 @@ $(function(){
         username:$('#user-input').val(),
         password:$('#password-input').val()
         })
-      .success(function(msg) {
+      .success(function(res) {
         var successMessage = $('<div>')
-        successMessage.text(msg)
+        successMessage.text(res)
         $loginControls.append(successMessage)
         $('#create-account').hide()
         $('#submit').show()
@@ -223,6 +228,7 @@ var userLoggedIn = function (msg) {
   if (msg[0].username || msg == "User logged in."){
   $loginControls.hide()
   $userControls.show()
+  populateSongList()
   }else {
     var errorMessage = $('<div>')
     errorMessage.html(msg)
@@ -310,7 +316,7 @@ var makeSongObjects = function (array) {
 var addTempLinks = function (array,num){
   if (num == array.length){
     console.log('Temp links added!')
-    updateUserSongList()
+    updateUserSongList(0)
   }else{
   var link = ""
   $.ajax({
@@ -326,18 +332,7 @@ var addTempLinks = function (array,num){
     .fail(function(err) {
       console.log(err);
   })
-}
-
-
-
-  // array.forEach(function(song){
-  //   var path = makeNewTempLink(song.filepath);
-  //   song.tempUrl = path;
-  //   console.log(path + song.filepath + song.tempUrl)
-  // })
-  //
-  // console.log("Temp Links Added")
-  //setTimeout(updateSongList,300000)
+ }
 }
 
 // Create temporary dropbox url to each song.  Can be used to play or to read ID3 tags.
@@ -356,38 +351,39 @@ var makeNewTempLink = function (path) {
     .fail(function(err) {
       console.log(err);
   })
-
 }
 
 
 
-
-var updateUserSongList = function () {
-  userSongList.forEach(function(song){
-    id3(song.tempUrl, function(err, tags) {
-        song.title = tags.title;
-        song.artist = tags.artist;
-        song.year = tags.year;
-        song.album = tags.album;
+var updateUserSongList = function (num) {  //fix this and make it recursive also
+  if (num === songObjects.length-1){
+    console.log("ID3 tag successfully added.")
+  } else {
+    id3(songObjects[num].tempUrl, function(err, tags) {
+        songObjects[num].title = tags.title;
+        songObjects[num].artist = tags.artist;
+        songObjects[num].year = tags.year;
+        songObjects[num].album = tags.album;
+        updateUserSongList(num+1)
       })
-      console.log("user song list updated")
+    }
 //    saveUserSongs();
 //    updateSongList();
-  })
 }
 
+//Save song data to db.  Array is sent as string to be JSON.parsed by server.
 var saveUserSongs = function () {
   $.ajax({
-    url: "/users",
+    url: "/users/" + loggedInUser._id,
     method: "PUT",
-    songs: userSongList
-  }).success(function(){
-    console.log("success")
+    data: {songs:JSON.stringify(songObjects)}
+  }).success(function(log){
+    console.log(log)
   }).fail(function(){
     console.log("fail")
   })
-  console.log("user songs saved")
 }
+
 
 var updateSongList = function (){
   userSongList.forEach(function(song){
@@ -397,4 +393,18 @@ var updateSongList = function (){
     $songList.append($song);
   })
 console.log("song list updated front end")
+}
+
+
+var populateSongList = function () {
+  $.get({
+    url: "/users/" + loggedInUser._id,
+    method: "PUT",
+    data: {songs:JSON.stringify(songObjects)}
+  }).success(function(log){
+    console.log(log)
+  }).fail(function(){
+    console.log("fail")
+  })
+
 }

@@ -6,6 +6,7 @@ var User = require('models/user.js');
 var mongoose = require('mongoose');
 var app = express();
 
+app.use(bodyParser({limit: '50mb'})); //allows large updates when refreshing a user's song list
 
 app.use(logger('dev'));
 app.use(express.static('./public'));
@@ -16,6 +17,8 @@ app.use(session({
   saveUninitialized: false,
   resave: false
 }));
+
+
 
 //establish mongo connection
 mongoose.connect('mongodb://localhost/mp3App', function (err) {
@@ -79,13 +82,39 @@ app.listen(3000,function(){console.log("Server Running on 3000")});
           }
       })
   })
-//
-  app.put('/users', function (req, res) {
-    console.log(req.body)
-    var user = User.findById(req.session.currentUser)
-    user.songs = req.body.params
-    user.save()
+
+//Update a user's songs.
+  app.put('/users/:id', function (req, res) {
+    console.log(JSON.parse(req.body.songs))
+    User.findOneAndUpdate({
+      _id:req.params.id
+    }, {
+       $set: {songs: JSON.parse(req.body.songs)}
+    }, function(err, user) {
+      console.log(user);
+      res.send("Songs successfully saved.");
+    });
   });
+
+    //
+    // var user = User.findOneAndUpdate({
+    //   _id:req.params.id
+    // });
+    //   //console.log((req.body.songs))
+    //   //var songsDecoded = (toString(req.body)).match(/\[(.*?)\]/g)
+    //   //console.log(JSON.parse(songsDecoded))
+    //   user.songs = JSON.parse(req.body.songs);
+    //   console.log(user.songs)
+    //   user.save(function(err,saved) {
+    //   if (err) {
+    //     console.log(err);
+    //   } else {
+    //     console.log('saved')
+    //   }
+    // })
+    //   console.log(user.songs[0]);
+    // });
+
 
 // app.get('/sessions', function(req,res){
 //   console.log(req.session)
@@ -113,6 +142,7 @@ app.post('/sessions', function(req,res){
          console.log(user[0]._id)
          req.session.currentUser = user[0]._id;
          res.send(user);
+         console.log("User is" + user)
          console.log(req.session)
        } else {
          res.send('Incorrect password.');
