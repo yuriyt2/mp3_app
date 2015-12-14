@@ -8,7 +8,7 @@ var UserSchema = new mongoose.Schema({
   password: String,
   token: String,
   songs: [{
-    id: String,
+    id: Number,
     filepath: String,
     tempUrl: String,
     artist: String,

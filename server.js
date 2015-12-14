@@ -38,11 +38,14 @@ app.listen(3000,function(){console.log("Server Running on 3000")});
 // })
 
 
-// app.get('/users', function(req, res) {
-//     User.find().populate('posts').exec(function(err, users) {
-//       res.send(users);
-//     });
-//   });
+app.get('/users/:id', function(req, res) {
+  console.log("got id" + req.params.id)
+    User.find({
+      _id:req.params.id
+    }).populate('songs').exec(function(err, user) {
+      res.send(user);
+    });
+  });
 //
 //   var restrictAccess = function (req, res, next) {
 //     var sessionId = req.session.currentUser;
@@ -60,7 +63,7 @@ app.listen(3000,function(){console.log("Server Running on 3000")});
 //     });
 //   });
 //
-  app.post('/users', function(req,res){
+  app.post('/users/', function(req,res){
     console.log(req.body)
     console.log("hi")
     var user = new User(req.body);
@@ -96,24 +99,6 @@ app.listen(3000,function(){console.log("Server Running on 3000")});
     });
   });
 
-    //
-    // var user = User.findOneAndUpdate({
-    //   _id:req.params.id
-    // });
-    //   //console.log((req.body.songs))
-    //   //var songsDecoded = (toString(req.body)).match(/\[(.*?)\]/g)
-    //   //console.log(JSON.parse(songsDecoded))
-    //   user.songs = JSON.parse(req.body.songs);
-    //   console.log(user.songs)
-    //   user.save(function(err,saved) {
-    //   if (err) {
-    //     console.log(err);
-    //   } else {
-    //     console.log('saved')
-    //   }
-    // })
-    //   console.log(user.songs[0]);
-    // });
 
 
 // app.get('/sessions', function(req,res){
@@ -154,6 +139,6 @@ app.post('/sessions', function(req,res){
 
 app.delete('/sessions', function(req,res){
   req.session.currentUser = null;
-  res.send(console.log('logged out'))
-  res.send(console.log(req.session.currentUser))
+  console.log('logged out');
+  res.send(__dirname + "/public/index.html")
 })

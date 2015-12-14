@@ -10,6 +10,7 @@ var $loginControls = $('#login');
 var $nameDiv = $('#name-div');
 var $songList = $('#song-list');
 var $addSongButton = $('#add-song-button');
+var $removeSongButton = $('#remove-song-button');
 var $playlistSelect = $('#playlist');
 
 //Dropbox
@@ -23,6 +24,7 @@ var playList = [];
 var currentSong = {};
 var songFileNames = []; //to be used to get filenames from dropbox
 var songObjects = [];   //to be used in the creation process of songs
+var soundObject = {};
 
 
 
@@ -96,12 +98,15 @@ $(function(){
   })
   })
 
-$('#logout').on('click', function(e){
-  e.preventDefault();
+$('#logout').on('click', function(){
   $.ajax({
     url: "/sessions",
     method: "DELETE"
-  }).fail(function(err){
+  })
+    .done(function(){
+      window.location.href = "/"
+  })
+    .fail(function(err){
     console.log(err)
   })
 })
@@ -113,11 +118,12 @@ $updateSongs.on('click', getSongFileNames);
 
 
   $("#droppost").on('click',function(){
+    getToken()
     $.ajax({
       url: 'https://api.dropboxapi.com/1/metadata/auto/?&include_media_info=true&include_membership=true&list=true',
       dataType: "json",
       method: 'GET',
-      headers: {'Authorization': 'Bearer ' + token}
+      headers: {'Authorization': 'Bearer ' + userToken}
     }).done(function(data){
       username = data
       console.log(username)
@@ -126,25 +132,6 @@ $updateSongs.on('click', getSongFileNames);
     })
   })
 
-  $("#link").on('click',function(){
-    $.ajax({
-      url: 'https://api.dropboxapi.com/1/media/auto/Warlock.mp3',
-      dataType: "json",
-      method: 'POST',
-      headers: {'Authorization': 'Bearer ' + token}
-    }).done(function(data){
-      console.log(data)
-      console.log(data.url)
-      id3(data.url, function(err, tags) {
-          console.log(err)
-          console.log(tags)
-      });
-
-      console.log(data)
-    }).fail(function(err) {
-      console.log(err);
-    })
-  })
 
 
 
@@ -152,76 +139,76 @@ $updateSongs.on('click', getSongFileNames);
 //++++++++++++++ User interaction controls +++++++++++++++++++++++++++++++++++++++
 
 $addSongButton.on('click', function(){
-  makeNewTempLink(userSongList(parseInt($songlist.val())));
-  playList.push(userSongList(parseInt($songlist.val())));
-  updatePlaylist();
+  var index = null
+  userSongList.forEach(function(song){
+    if (song.id == parseInt($songList.val())){
+    index = userSongList.indexOf(song);
+  }
 })
+  makeNewTempLink( userSongList[index] );
+})
+
+$removeSongButton.on('click', removeSelectedSong);
+
 
 
 //++++++++++++++ Music player controls +++++++++++++++++++++++++++++++++++++++
 
   $("#play").on('click', function(){
-    someSound.togglePause()
+    if (!currentSong.title && playList.length > 0){
+      assignCurrentSong(playList[0]);
+      console.log(currentSong.title + playList.length + 168)
+    }
+    playSong()
   })
-  $("#pause").on('click', function(){
-    //someSound.pause()
+
+  $("#stop").on('click', function(){
+    soundObject.stop();
   })
   $("#volume").change(function(){
-    soundManager.setVolume(parseInt($("#volume").val()));
+    soundObject.setVolume(parseInt($("#volume").val()));
   })
   $("#position").change(function(){
-    soundManager.setPosition(someSound.id,parseInt($("#position").val())/100 * someSound.durationEstimate);
+    soundManager.setPosition(soundObject.id,parseInt(Math.floor($("#position").val())/100 * soundObject.durationEstimate));
+  })
+  $("#back").on('click', function(){
+    if (soundObject.position > 4000){
+      soundManager.setPosition('song',0)
+    }else {
+      soundObject.stop();
+      assignCurrentSong(playList[playList.indexOf(currentSong)-1]);
+      soundObject.url = currentSong.tempUrl;
+      soundObject.play();
+    }
+  })
+  $("#forward").on('click', function(){
+    soundObject.stop();
+    assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
+    soundObject.url = currentSong.tempUrl;
+    soundObject.play();
+  })
+
+  $("#playlist").on('dblclick', function(e){
+    soundObject.stop()
+    console.log(e.target)
+    var clickedSong = null
+    playList.forEach(function(song){
+      if (song.id == e.target.value){
+        clickedSong = playList[playList.indexOf(song)]
+        assignCurrentSong(clickedSong)
+      }
+    })
+    playSong()
   })
 
 //close the onload function:
 })
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-var url = window.location.href
 var getToken = function (){
-  result = ''
-  for (var i = 36; i < url.length; i++) {
-    if (url[i] == '&'){
-      break
-    }
-    result += url[i]
-  }
-  return result
+  result = window.location.href.match('\access_token=(.+)\&t')[1]
+  userToken = result
 }
-var token = getToken()
-
-var username = ""
-var ulr2 = window.location.href.match('\#.+\&')
-
-
-// media - get file direct url
-//https://api.dropboxapi.com/1/media/auto/
-
-//ID3 tag reader
-// id3(data., function(err, tags) {
-//     // tags now contains v1, v2 and merged tags
-// });
-
-
-
-//mp3 player:
- soundManager.setup({
-  url: '/path/to/swf-files/',
-  flashVersion: 9, // optional: shiny features (default = 8)
-  // optional: ignore Flash where possible, use 100% HTML5 mode
-  // preferFlash: false,
-  onready: function() {
-
-    someSound = soundManager.createSound({
-      url: 'https://dl.dropboxusercontent.com/1/view/opuch63pc3g2i38/Apps/remote_music_app/Warlock.mp3'
-    });
-
-    // Ready to use; soundManager.createSound() etc. can now be called.
-  }
-});
-
-var song = ""
 
 var userLoggedIn = function (msg) {
   console.log("userLoggedIn hit")
@@ -229,6 +216,8 @@ var userLoggedIn = function (msg) {
   $loginControls.hide()
   $userControls.show()
   populateSongList()
+  setUpMusicPlayer()
+  getToken()
   }else {
     var errorMessage = $('<div>')
     errorMessage.html(msg)
@@ -271,11 +260,12 @@ var loadLibrary = function (songs) {
 }
 
 var updatePlaylist = function () {
+  $('.songs').remove()
   playList.forEach(function(song){
-    var $song = $('<option>');
+    var $song = $('<option class="songs">');
     $song.attr('value',song.id)
-    $song.text(song.artist + " - " + song.title + "0:00");
-    $playList.append($song);
+    $song.text(song.artist + " - " + song.title);
+    $playlistSelect.append($song);
   })
 
 }
@@ -287,11 +277,12 @@ var updatePlaylist = function () {
 
 var getSongFileNames = function () {
   console.log("get song names")
+  getToken()
   $.ajax({
     url: 'https://api.dropboxapi.com/1/metadata/auto/?&include_media_info=true&include_membership=true&list=true',
     dataType: "json",
     method: 'GET',
-    headers: {'Authorization': 'Bearer ' + token}
+    headers: {'Authorization': 'Bearer ' + userToken}
   }).done(function(data){
     data.contents.forEach(function(name){
     songFileNames.push(name.path)
@@ -299,22 +290,21 @@ var getSongFileNames = function () {
   }).fail(function(err) {
     console.log(err);
   })
-  //setTimeout(function(){makeSongObjects(songFileNames)},10000)
+  setTimeout(function(){makeSongObjects(songFileNames)},5000)
 }
 
 //The 2nd step to adding songs is to turn all the paths into song objects.
 var makeSongObjects = function (array) {
   for (var i = 0; i < array.length; i++) {
-    songObjects.push({id:i+1,filepath:array[i],tempUrl:null,artist:null,title:null,album:null,year:null})
-    console.log(songObjects.length)
+    songObjects.push({id:i,filepath:array[i],tempUrl:null,artist:null,title:null,album:null,year:null})
   }
   console.log("Song Objects Made")
-  //addTempLinks(songObjects)
+  addTempLinks(songObjects,0)
 }
 
-// Add temp links to all the song objects.
+// Add temp links to all the song objects.  Will be used to read ID3 tags.
 var addTempLinks = function (array,num){
-  if (num == array.length){
+  if (num == array.length-1){
     console.log('Temp links added!')
     updateUserSongList(0)
   }else{
@@ -323,7 +313,7 @@ var addTempLinks = function (array,num){
     url: 'https://api.dropboxapi.com/1/media/auto' + array[num].filepath,
     dataType: "json",
     method: 'POST',
-    headers: {'Authorization': 'Bearer ' + token}
+    headers: {'Authorization': 'Bearer ' + userToken}
   }).done(function(data){
       console.log("link created" + data.url)
       array[num].tempUrl = data.url
@@ -335,18 +325,20 @@ var addTempLinks = function (array,num){
  }
 }
 
-// Create temporary dropbox url to each song.  Can be used to play or to read ID3 tags.
-var makeNewTempLink = function (path) {
+// Create new temp link and add song to playlist.
+var makeNewTempLink = function (song) {
   var link = ""
   $.ajax({
-    url: 'https://api.dropboxapi.com/1/media/auto' + path,
+    url: 'https://api.dropboxapi.com/1/media/auto' + song.filepath,
     dataType: "json",
     method: 'POST',
-    headers: {'Authorization': 'Bearer ' + token}
+    headers: {'Authorization': 'Bearer ' + userToken}
   }).done(function(data){
       console.log("link created" + data.url)
       link = data.url
-      return link
+      song.tempUrl = link
+      playList.push(song);
+      updatePlaylist();
   })
     .fail(function(err) {
       console.log(err);
@@ -355,9 +347,13 @@ var makeNewTempLink = function (path) {
 
 
 
-var updateUserSongList = function (num) {  //fix this and make it recursive also
+var updateUserSongList = function (num) {
+  console.log("Update " + num)
   if (num === songObjects.length-1){
-    console.log("ID3 tag successfully added.")
+    saveUserSongs()
+    updateSongList();
+  }else if (songObjects[num].title !== null){
+    updateUserSongList(num+1)
   } else {
     id3(songObjects[num].tempUrl, function(err, tags) {
         songObjects[num].title = tags.title;
@@ -367,8 +363,6 @@ var updateUserSongList = function (num) {  //fix this and make it recursive also
         updateUserSongList(num+1)
       })
     }
-//    saveUserSongs();
-//    updateSongList();
 }
 
 //Save song data to db.  Array is sent as string to be JSON.parsed by server.
@@ -379,6 +373,7 @@ var saveUserSongs = function () {
     data: {songs:JSON.stringify(songObjects)}
   }).success(function(log){
     console.log(log)
+    populateSongList()
   }).fail(function(){
     console.log("fail")
   })
@@ -387,8 +382,7 @@ var saveUserSongs = function () {
 
 var updateSongList = function (){
   userSongList.forEach(function(song){
-    var $song = $('<option>');
-    $song.attr('value',song.id);
+    var $song = $('<option value=' + song.id + '>');
     $song.text(song.artist + " - " + song.title);
     $songList.append($song);
   })
@@ -397,14 +391,82 @@ console.log("song list updated front end")
 
 
 var populateSongList = function () {
-  $.get({
+  $.ajax({
     url: "/users/" + loggedInUser._id,
-    method: "PUT",
-    data: {songs:JSON.stringify(songObjects)}
-  }).success(function(log){
-    console.log(log)
+    method: "GET",
+  }).success(function(data){
+    console.log(data)
+    userSongList = data[0].songs
+    //sort songs by artist alphabetically
+      function compare(a,b) {
+        if (a.artist < b.artist)
+          return -1;
+        if (a.artist > b.artist)
+          return 1;
+        return 0;
+      }
+      userSongList = userSongList.sort(compare);
+
+
+    updateSongList();
   }).fail(function(){
-    console.log("fail")
+    console.log("fail");
   })
 
+}
+
+var setUpMusicPlayer = function () {
+  //mp3 player:
+   soundManager.setup({
+    flashVersion: 9,
+    // preferFlash: false,
+    onready: function() {
+
+      soundObject = soundManager.createSound({
+        id: "song",
+        url: '',
+        onfinish: function(){
+
+        if (playList.indexOf(currentSong)+1 === playlist.length){
+          assignCurrentSong(playList[0])
+        }else{
+        assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
+        soundObject.url = currentSong.tempUrl;
+      };
+        playSong()
+      },
+      whileplaying: function(){
+        $("#position").val(soundObject.position/soundObject.durationEstimate * 100)
+      }
+
+      });
+    }
+  });
+}
+
+
+var assignCurrentSong = function(song){
+  currentSong = song
+}
+
+var playSong = function(){
+  soundObject.url = currentSong.tempUrl;
+  soundObject.togglePause()
+}
+
+var removeSelectedSong = function(){
+  var songSelected = $playlistSelect.val()
+  var index = null
+  var deleteSongFromArray = function () {
+    if (index !== null){
+      playList.splice(index,1);
+    }
+  }
+  playList.forEach(function(song){
+    if (song.id == songSelected){
+    index = playList.indexOf(song);
+  }
+})
+  deleteSongFromArray();
+  updatePlaylist();
 }
