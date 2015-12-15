@@ -1,0 +1,160 @@
+body {
+  font-size: 1em;
+  margin: 0px;
+  background-color: #bdc3c7;
+  font-family: 'Inconsolata' ;
+}
+
+
+#photo {
+  width: 1066px;
+  height: 491px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 230px;
+}
+
+#playlist {
+  width: 470px;
+  height: 200px;
+  position: absolute;
+  z-index: 1;
+  bottom: 72%;
+  right: 7%;
+  box-shadow: 1px 1px 1px #888888;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 1em;
+  border-radius: 2px;
+}
+
+#song-list {
+  width: 470px;
+  height: 25px;
+  position: absolute;
+  z-index: 1;
+  bottom: 113%;
+  right: 7%;
+  font-size: 1em;
+}
+
+#name-div {
+  width: 50px;
+  right: 5px;
+  position: absolute;
+  font-size: 1.2em;
+  padding-top: 5px;
+}
+
+
+#audio {
+  transform: rotate(-11.5deg);
+  position: absolute;
+  z-index: 1;
+  bottom: 64.3%;
+  left: 9.5%;
+}
+
+.button {
+  border: 2px solid black;
+  border-radius: 7px;
+  width: 60px;
+  height: 25px;
+  background-color: #682720;
+  color: #bdc3c7;
+}
+
+#play {
+  width: 80px;
+}
+
+#volume {
+  transform: rotate(217deg);
+  position: absolute;
+  z-index: 1;
+  bottom: 87%;
+  left: 32.5%;
+  width: 80px;
+}
+
+#volume-img {
+  transform: rotate(-34deg);
+  max-width: 20px;
+  position: absolute;
+  z-index: 1;
+  bottom: 79.5%;
+  left: 40%;
+  width: 80px;
+}
+
+#position {
+  transform: rotate(-12.8deg);
+  position: absolute;
+  z-index: 1;
+  bottom: 60%;
+  left: 8.5%;
+  width: 405px;
+}
+
+#add-song-button {
+  width: 234px;
+  position: absolute;
+  z-index: 1;
+  bottom: 68%;
+  right: 29%;
+}
+
+#remove-song-button {
+  width: 234px;
+  position: absolute;
+  z-index: 1;
+  bottom: 68%;
+  right: 7%;
+}
+
+#top-controls {
+  width: 101%;
+  height: 35px;
+  background-color: #7f8c8d;
+  color: #ecf0f1;
+  padding: 5px;
+  margin: 0px;
+  border-bottom: 2px solid black;
+}
+
+.top-buttons {
+  height: 30px;
+  margin: 2px;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+}
+
+#login {
+  width: 300px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.4em;
+  padding: 15px;
+}
+
+.login {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#password-input , #user-input , #pass-conf-input {
+  width: 300px;
+  height: 30px;
+  font-size: 1em;
+  text-align: center;
+}
+
+#create, #submit, #create-account {
+  width: 306px;
+  height: 35px;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-size: .8em;
+  color: #7f8c8d;
+}

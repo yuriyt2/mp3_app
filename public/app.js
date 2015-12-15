@@ -58,15 +58,15 @@ $(function(){
   //create new account button
   $('#create').on('click', function(e){
     e.preventDefault();
-    var passConfirm = $('<input id="pass-conf-input" type="password" value required>');
-    var label = $('<label for="pass-conf-input">');
+    var passConfirm = $('<input class="login" id="pass-conf-input" type="password" value required>');
+    var label = $('<label class="login" for="pass-conf-input">');
     $('#password-input').after(label);
     label.text('Confirm Password');
     $(label).after(passConfirm)
 
     $('#create').hide()
     $('#submit').hide()
-    passConfirm.after('<button id="create-account" type="submit">Create Account</button>')
+    passConfirm.after('<button class="login" id="create-account" type="submit">Create Account</button>')
 
     $('#create-account').on('click', function(e){
     e.preventDefault()
@@ -213,8 +213,8 @@ var getToken = function (){
 var userLoggedIn = function (msg) {
   console.log("userLoggedIn hit")
   if (msg[0].username || msg == "User logged in."){
-  $loginControls.hide()
   $userControls.show()
+  $loginControls.hide()
   populateSongList()
   setUpMusicPlayer()
   getToken()
