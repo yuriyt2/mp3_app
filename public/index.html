@@ -2,16 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Music App</title>
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <title>MP3-Trove</title>
+
+<!--Styles and Font and jQuery -->
     <link rel="stylesheet" href="/style.css" media="screen" title="no title" charset="utf-8">
     <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
   </head>
   <body>
+
 <!-- Login and account creation control buttons and inputs ------------------------>
 <form id="login" method="post" action="/users">
 
-  <h2>Please Log In</h2>
+  <h1 id="logo">MP3 Trove</h1>
+
+  <h3>please log in</h3>
   <label class="login" for="user-input">username</label>
   <input class="login" id="user-input" type="text" name="name" value="" required min="5"><br>
   <label class="login" for="password-input">password</label>
@@ -21,26 +26,27 @@
 </form>
 
 
-
 <!--  Options after a user logs in ------------------------------------------------>
 <div id="user-controls">
 
-
-
   <div id="top-controls">
-      <div id="name-div"></div>
-      <button class="top-buttons" id="logout" type="button" name="button">Logout</button>
+
+      <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=cfj6it2rfy48mvd&response_type=token&redirect_uri=http://localhost:3000/"><button class="top-buttons" id="drop" type="bus" name="bus">Connect Dropbox</button></a>
       <button class="top-buttons" id="update-songs" type="button" name="button">Update Songs</button>
-      <button class="top-buttons" id="check-token" type="button" name="button">Check Token</button>
-      <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=cfj6it2rfy48mvd&response_type=token&redirect_uri=http://localhost:3000/"><button class="top-buttons" id="drop" type="bus" name="bus">Get Dropbox</button></a>
+      <button class="top-buttons" id="logout" type="button" name="button">Logout</button>
+      <h1 id="title">MP3-Trove</h1>
+      <div id="name-div"></div>
   </div>
 
 
-
+<!--  The image and controls go here ------------------------------------------------>
+<div id="message-div"></div>
 <div id="photo">
   <div id="photo_block">
     <!-- User's song library goes here  -->
     <select id="song-list" name="Your Stack"></select>
+
+    <!-- These buttons are on the turntable to make it realistic (they work!)  -->
     <div id="audio">
       <button class="button" id="back" type="button" name="button"><<</button>
       <button class="button" id="play" type="button" name="button">Play/Pause</button>
@@ -48,32 +54,46 @@
       <button class="button" id="forward" type="button" name="button">>></button>
     </div>
 
-    <input id="volume" type="range" name="button" min="0" max="100"></input>
-    <img id="volume-img" src="http://freeiconbox.com/icon/256/1575.png" alt="" />
-    <input id="position" type="range" name="button" min="0" max="100"></input>
+    <!-- User's control panel -->
 
-    <button id="add-song-button" type="button" name="button">Add Song</button>
-      <select id="playlist" name="Your Stack" size="10" multiple>
-        <option value="" disabled selected>  Your Playlist</option>
-      </select>
 
+
+    <!-- Playlist and buttons -->
+    <select id="playlist" name="Your Stack" size="10" multiple>
+      <option id="disabled" value="" disabled selected>  Your Playlist</option>
+    </select>
+    <button id="delete-playlist-button" type="button" name="button">Delete Playlist</button>
     <button id="remove-song-button" type="button" name="button">Remove Song</button>
-    <img id="table" src="https://s3.amazonaws.com/abucketforphotos/project+image.png" alt="" />
+    <button id="add-song-button" type="button" name="button">Add Song</button>
+
+
+
+    <!-- MP3 player audio controls -->
+    <div id="audio-2">
+      <button class="button-2" id="back-2" type="button" name="button"><<</button>
+      <button class="button-2" id="play-2" type="button" name="button">Play/Pause</button>
+      <button class="button-2" id="stop-2" type="button" name="button">Stop</button>
+      <button class="button-2" id="forward-2" type="button" name="button">>></button>
+    </div>
+
+      <input id="volume" type="range" name="button" min="0" max="100" value="65"></input>
+      <img id="volume-img" src="http://freeiconbox.com/icon/256/1575.png" alt="" />
+      <input id="position" type="range" name="button" min="0" max="100" value="0"></input>
+
+      <!-- Main image -->
+      <img id="table" src="https://s3.amazonaws.com/abucketforphotos/project+image.png" alt="" />
+      <div id="record"></div><div id="red-button"class=""></div>
+    </div>
   </div>
 </div>
 
 
+  <!-- Javascript files and libraries  -->
+        <script src="js/soundmanager2-jsmin.js" charset="utf-8"></script>
+        <script src="js/app.js" charset="utf-8"></script>
+        <script src="js/login.js" charset="utf-8"></script>
+        <script src="js/playercontroller.js" charset="utf-8"></script>
+        <script src="js/id3tag.js" charset="utf-8"></script>
 
-
-</div>
-
-
-
-
-
-
-        <script src="soundmanager2-jsmin.js" charset="utf-8"></script>
-        <script src="app.js" charset="utf-8"></script>
-    </script>
   </body>
 </html>

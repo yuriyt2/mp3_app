@@ -1,141 +1,25 @@
 body {
   font-size: 1em;
   margin: 0px;
-  background-color: #bdc3c7;
+  background-color: #ecf0f1;
   font-family: 'Inconsolata' ;
 }
 
-
-#photo {
-  width: 1066px;
-  height: 491px;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 230px;
-}
-
-#playlist {
-  width: 470px;
-  height: 200px;
-  position: absolute;
-  z-index: 1;
-  bottom: 72%;
-  right: 7%;
-  box-shadow: 1px 1px 1px #888888;
-  background-color: rgba(255, 255, 255, 0.8);
-  font-size: 1em;
-  border-radius: 2px;
-}
-
-#song-list {
-  width: 470px;
-  height: 25px;
-  position: absolute;
-  z-index: 1;
-  bottom: 113%;
-  right: 7%;
-  font-size: 1em;
-}
-
-#name-div {
-  width: 50px;
-  right: 5px;
-  position: absolute;
-  font-size: 1.2em;
-  padding-top: 5px;
-}
-
-
-#audio {
-  transform: rotate(-11.5deg);
-  position: absolute;
-  z-index: 1;
-  bottom: 64.3%;
-  left: 9.5%;
-}
-
-.button {
-  border: 2px solid black;
-  border-radius: 7px;
-  width: 60px;
-  height: 25px;
-  background-color: #682720;
-  color: #bdc3c7;
-}
-
-#play {
-  width: 80px;
-}
-
-#volume {
-  transform: rotate(217deg);
-  position: absolute;
-  z-index: 1;
-  bottom: 87%;
-  left: 32.5%;
-  width: 80px;
-}
-
-#volume-img {
-  transform: rotate(-34deg);
-  max-width: 20px;
-  position: absolute;
-  z-index: 1;
-  bottom: 79.5%;
-  left: 40%;
-  width: 80px;
-}
-
-#position {
-  transform: rotate(-12.8deg);
-  position: absolute;
-  z-index: 1;
-  bottom: 60%;
-  left: 8.5%;
-  width: 405px;
-}
-
-#add-song-button {
-  width: 234px;
-  position: absolute;
-  z-index: 1;
-  bottom: 68%;
-  right: 29%;
-}
-
-#remove-song-button {
-  width: 234px;
-  position: absolute;
-  z-index: 1;
-  bottom: 68%;
-  right: 7%;
-}
-
-#top-controls {
-  width: 101%;
-  height: 35px;
-  background-color: #7f8c8d;
-  color: #ecf0f1;
-  padding: 5px;
-  margin: 0px;
-  border-bottom: 2px solid black;
-}
-
-.top-buttons {
-  height: 30px;
-  margin: 2px;
-  border-radius: 6px;
-  background-color: #FFFFFF;
-}
+/*Login page -------------------------------------------------------*/
 
 #login {
   width: 300px;
   text-align: center;
+  margin-top: 90px;
   margin-left: auto;
   margin-right: auto;
   font-size: 1.4em;
   padding: 15px;
+}
+
+#logo {
+  font-size: 2.5em;
+  margin-bottom: 90px;
 }
 
 .login {
@@ -157,4 +41,231 @@ body {
   background-color: #FFFFFF;
   font-size: .8em;
   color: #7f8c8d;
+}
+
+/*Nav Bar -----------------------------------------------------------------*/
+
+#top-controls {
+  width: 101%;
+  height: 45px;
+  background-color: #7f8c8d;
+  color: #ecf0f1;
+  padding: 5px;
+  margin: 0px;
+  border-bottom: 2px solid black;
+}
+
+.top-buttons {
+  font-size: .8em;
+  height: 40px;
+  margin: 2px;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+}
+
+#title {
+  width: 280px;
+  text-align: center;
+  position: relative;
+  margin-top: -52px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 3.4em;
+}
+
+#name-div {
+  width: 50px;
+  right: 17px;
+  position: absolute;
+  font-size: 1.5em;
+  padding-top: 5px;
+  margin-top: -79px;
+}
+
+/*------------Message section ---------------------*/
+
+#message-div {
+  width: 800px;
+  position: relative;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+  margin-bottom: -70px;
+}
+
+
+/*------------Main image and controls ---------------------*/
+
+#photo {
+  width: 1066px;
+  height: 491px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 290px;
+}
+
+#playlist {
+  width: 470px;
+  height: 200px;
+  position: absolute;
+  z-index: 1;
+  bottom: 68%;
+  right: 7%;
+  box-shadow: 1px 1px 1px #888888;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 1em;
+  border-radius: 2px;
+}
+
+#song-list {
+  width: 468px;
+  height: 25px;
+  position: absolute;
+  z-index: 1;
+  bottom: 127%;
+  right: 7%;
+  font-size: 1em;
+}
+
+#audio {
+  transform: rotate(-11.5deg);
+  position: absolute;
+  z-index: 1;
+  bottom: 63.7%;
+  left: 9.1%;
+}
+
+.button {
+  /*border: 2px solid black;*/
+  border-radius: 7px;
+  width: 60px;
+  height: 25px;
+  background-color: #313222;
+  color: #bdc3c7;
+}
+
+#play {
+  width: 80px;
+}
+
+#delete-playlist-button {
+  width: 154px;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  right: 36.5%;
+  height: 30px;
+  margin: 1px;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  font-size: .8em;
+}
+
+
+#remove-song-button {
+  width: 154px;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  right: 21.75%;
+  height: 30px;
+  margin: 1px;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  font-size: .8em;
+}
+
+#add-song-button {
+  width: 154px;
+  position: absolute;
+  z-index: 1;
+  bottom: 120%;
+  right: 6.9%;
+  height: 30px;
+  margin: 1px;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  font-size: .8em;
+}
+
+
+#audio-2 {
+  width: 475px;
+  height: 25px;
+  position: absolute;
+  z-index: 1;
+  bottom: 114%;
+  right: 6.7%;
+  font-size: 1em;
+}
+
+.button-2 {
+  width: 95px;
+  height: 30px;
+  margin: 1px;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  font-size: .8em;
+}
+
+#play-2 {
+  width: 157px;
+}
+
+
+#position {
+  width: 468px;
+  height: 25px;
+  position: absolute;
+  z-index: 1;
+  bottom: 108%;
+  right: 7%;
+  font-size: 1em;
+}
+
+#volume {
+  transform: rotate(270deg);
+  position: absolute;
+  z-index: 1;
+  bottom: 101%;
+  right: -7.5%;
+  width: 273px;
+}
+
+#volume-img {
+  transform: rotate(0deg);
+  max-width: 20px;
+  position: absolute;
+  z-index: 1;
+  bottom: 68.5%;
+  right: 4.1%;
+  width: 80px;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+  padding-top: 3px;
+  padding: 2px;
+  border: 2px solid black;
+}
+
+#record {
+  left: 14.5%;
+  bottom: 75.5%;
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  border-radius: 50px;
+  z-index: 2;
+}
+
+#red-button {
+  left: 38.5%;
+  bottom: 67.5%;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50px;
+  z-index: 2;
 }
