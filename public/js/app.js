@@ -171,7 +171,9 @@ var addTempLinks = function (array,num){
       console.log("link created" + data.url)
       array[num].tempUrl = data.url
       addTempLinks(array,num+1)
-      updateUserSongList(0)
+      if (num == 2){
+        updateUserSongList(0)
+      }
   })
     .fail(function(err) {
       console.log(err);
