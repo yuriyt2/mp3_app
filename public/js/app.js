@@ -160,7 +160,6 @@ var makeSongObjects = function (array) {
 var addTempLinks = function (array,num){
   if (num == array.length-1){
     console.log('Temp links added!')
-    updateUserSongList(0)
   }else{
   var link = ""
   $.ajax({
@@ -172,6 +171,7 @@ var addTempLinks = function (array,num){
       console.log("link created" + data.url)
       array[num].tempUrl = data.url
       addTempLinks(array,num+1)
+      updateUserSongList(0)
   })
     .fail(function(err) {
       console.log(err);
