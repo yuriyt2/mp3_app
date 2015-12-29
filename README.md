@@ -24,6 +24,9 @@
 + Dropbox API
 + JavaScript ID3 Reader
 
+### Deployment URL
+[MP3 Trove](http://mp3trove.yuriyturetskiy.com/)
+
 ### Technical Details
 + To avoid frequent database access the app only accesses its MongoDB once, upon login, to acquire the user's song list.
 + Once a user is connected to Dropbox, the API is accessed to generate temporary links for songs added to the playlist.  Sound Manager 2 plays the song from the temporary link, thus avoiding the need for the user to download the MP3s locally and the API is only accessed when necessary.
