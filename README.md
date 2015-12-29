@@ -24,11 +24,15 @@
 + Dropbox API
 + JavaScript ID3 Reader
 
+### Deployment URL
+[MP3 Trove](http://mp3trove.yuriyturetskiy.com/)
+
 ### Technical Details
-+ To avoid frequent database access the app only accesses its MongoDB once, upon login, to acquire the user's song list.
++ To avoid frequent database access the app only accesses its MongoDB once (upon login) to acquire the user's song list.
 + Once a user is connected to Dropbox, the API is accessed to generate temporary links for songs added to the playlist.  Sound Manager 2 plays the song from the temporary link, thus avoiding the need for the user to download the MP3s locally and the API is only accessed when necessary.
 + A user may only play songs from a Dropbox account they have access to.
 + The app can only accesses files in the file folder it creates in a user's Dropbox account and is unable to access any of the other files a user may have in their account.
++ Once a user authorizes the app to use their Dropbox account, the Dropbox API requires a redirect to a HTTPS address.  
 
 ### Setup
 To test the app out locally:
@@ -37,6 +41,7 @@ To test the app out locally:
 2. Run a Node.js server from the app folder.
 3. Run a MongoDB server.
 4. Create a user account and log in.
+5. The redirect link in the index page must be updated to one registered with Dropbox.
 5. Click the "Connect Dropbox" button and provide your user information to Dropbox.
 6. Upload any songs you may wish to play to the remote_music_app folder Dropbox creates inside the Apps folder of your Dropbox account.
 7. Log back into MP3 Trove and click the "Update Songs" button.  This can take a few minutes for large song collections.
