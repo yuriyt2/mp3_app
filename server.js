@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var User = require('models/user.js');
 var mongoose = require('mongoose');
 var app = express();
+var fs = require('fs');
+var https = require('https');
 
 app.use(bodyParser({limit: '50mb'})); //allows large updates when refreshing a user's song list
 
@@ -30,8 +32,14 @@ mongoose.connect('mongodb://localhost/mp3App', function (err) {
 });
 
 //set up port to run on
-app.listen(3000,function(){console.log("Server Running on 3000")});
+//app.listen(3000,function(){console.log("Server Running on 3000")});
 
+var options = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.crt')
+};
+
+https.createServer(options, app).listen(3000);
 
 // app.get('/user', function(res,req){
 //   req.sendfile(__dirname + "/public/login.html")
