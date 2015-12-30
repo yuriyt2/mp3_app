@@ -211,17 +211,19 @@ var updateUserSongList = function (num) {
   }else if (songObjects[num].title !== null){
     updateUserSongList(num+1)
   } else {
-    id3(songObjects[num].tempUrl, function(err, tags) {
-      if (err) {
+    var fileurl = songObjects[num].tempUrl
+    ID3.loadTags(fileurl, function() {
+        tags = ID3.getAllTags(fileurl);
+        songObjects[num].title = tags.title;
+        songObjects[num].artist = tags.artist;
+        songObjects[num].year = tags.year;
+        songObjects[num].album = tags.album;
+        updateUserSongList(num+1)
+    }, {
+        onError: function(reason) {
           updateUserSongList(num+1)
-      }else{
-          songObjects[num].title = tags.title;
-          songObjects[num].artist = tags.artist;
-          songObjects[num].year = tags.year;
-          songObjects[num].album = tags.album;
-          updateUserSongList(num+1)
-        }
-      })
+            }
+        })
     }
 }
 
