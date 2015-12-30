@@ -202,7 +202,6 @@ var makeNewTempLink = function (song) {
 }
 
 
-
 var updateUserSongList = function (num) {
   console.log("Update " + num)
   if (num === songObjects.length-1){
