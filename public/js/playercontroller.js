@@ -29,10 +29,13 @@
     }
   })
   $("#forward, #forward-2").on('click', function(){
-    soundObject.stop();
-    assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
-    soundObject.url = currentSong.tempUrl;
-    soundObject.play();
+    //only go forward if there is another song ahead.
+    if (playList[playList.indexOf(currentSong)+1].tempUrl){
+      soundObject.stop();
+      assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
+      soundObject.url = currentSong.tempUrl;
+      soundObject.play();
+    }
   })
 
   $("#playlist").on('dblclick', function(e){
@@ -61,7 +64,6 @@
           id: "song",
           url: '',
           onfinish: function(){
-          console.log(playList.indexOf(currentSong) === playList.length-1)
           if (playList.indexOf(currentSong) === playList.length-1){
             assignCurrentSong(playList[0])
           }else{
@@ -75,7 +77,6 @@
 
           var timeDisplay = function(num){
             var secondsLeft = Math.round((soundObject.durationEstimate - num)/1000)
-            console.log(secondsLeft)
             if(secondsLeft < 10){
               return " 0:0" + secondsLeft
             } else if (secondsLeft < 60){
