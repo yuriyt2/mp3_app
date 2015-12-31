@@ -61,8 +61,8 @@
           id: "song",
           url: '',
           onfinish: function(){
-          console.log(playList.indexOf(currentSong))
-          if (playList.indexOf(currentSong)+1 === playlist.length){
+          console.log(playList.length)
+          if (playList.indexOf(currentSong) === playlist.length-1){
             assignCurrentSong(playList[0])
           }else{
           assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
@@ -75,13 +75,13 @@
 
           var timeDisplay = function(num){
             var secondsLeft = soundObject.durationEstimate - num
-            console.log(secondsLeft)
             if (secondsLeft < 60000){
               secondsLeft = secondsLeft.toString()
               return " 0:" + secondsLeft[0] + secondsLeft[1]
             }
             else if (secondsLeft < 360000){
-              var mins = secondsLeft % 60000
+              var mins = Math.round(secondsLeft % 60000)
+              console.log(mins)
               secondsLeft = secondsLeft.toString()
               return mins + ":" + secondsLeft[0] + secondsLeft[1]
             }
