@@ -83,7 +83,7 @@
             } else if (secondsLeft < 60){
               return "0:" + secondsLeft
             } else if (secondsLeft < 3600){
-              var mins = Math.round(secondsLeft % 60)
+              var mins = Math.round(secondsLeft / 60)
               console.log(mins)
               secondsLeft = secondsLeft - mins*60
               return " " + mins + ":" + secondsLeft
