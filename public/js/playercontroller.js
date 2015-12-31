@@ -30,12 +30,14 @@
   })
   $("#forward, #forward-2").on('click', function(){
     //only go forward if there is another song ahead.
-    if (playList[playList.indexOf(currentSong)+1].tempUrl){
+    if (playList[playList.indexOf(currentSong)+1].tempUrl !== null){
       soundObject.stop();
       assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
-      soundObject.url = currentSong.tempUrl;
-      soundObject.play();
+    } else {
+      assignCurrentSong(playList[0]);
     }
+    soundObject.url = currentSong.tempUrl;
+    soundObject.play();
   })
 
   $("#playlist").on('dblclick', function(e){
