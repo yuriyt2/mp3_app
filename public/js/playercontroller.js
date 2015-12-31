@@ -75,18 +75,15 @@
 
           var timeDisplay = function(num){
             var secondsLeft = Math.round((soundObject.durationEstimate - num)/1000)
-            console.log(soundObject.position)
-            console.log(soundObject.durationEstimate)
             console.log(secondsLeft)
             if(secondsLeft < 10){
-              return "0:0" + secondsLeft
+              return " 0:0" + secondsLeft
             } else if (secondsLeft < 60){
-              return "0:" + secondsLeft
+              return " 0:" + secondsLeft
             } else if (secondsLeft < 3600){
               var mins = Math.round(secondsLeft / 60)
               console.log(mins)
-              secondsLeft = secondsLeft - mins*60
-              return " " + mins + ":" + secondsLeft
+              return " " + mins + ":" + timeDisplay(secondsLeft % mins*60)
             }
           }
 
