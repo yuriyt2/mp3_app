@@ -77,6 +77,7 @@
             var secondsLeft = Math.round((soundObject.durationEstimate - num)/1000)
             console.log(soundObject.position)
             console.log(soundObject.durationEstimate)
+            console.log(secondsLeft)
             if(secondsLeft < 10){
               return "0:0" + secondsLeft
             } else if (secondsLeft < 60){
