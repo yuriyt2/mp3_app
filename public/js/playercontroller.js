@@ -74,16 +74,17 @@
           $("#position").val(soundObject.position/soundObject.durationEstimate * 100)
 
           var timeDisplay = function(num){
-            var secondsLeft = soundObject.durationEstimate - num
-            if (secondsLeft < 60000){
-              secondsLeft = secondsLeft.toString()
-              return " 0:" + secondsLeft[0] + secondsLeft[1]
-            }
-            else if (secondsLeft < 360000){
-              var mins = Math.round(secondsLeft % 60000)
+            var secondsLeft = Math.round(soundObject.durationEstimate - num/1000)
+            console.log(secondsLeft)
+            if(secondsLeft < 10){
+              return "0:0" + secondsLeft
+            } else if (secondsLeft < 60){
+              return "0:" + secondsLeft
+            } else if (secondsLeft < 3600){
+              var mins = Math.round(secondsLeft % 60)
               console.log(mins)
-              secondsLeft = secondsLeft.toString()
-              return mins + ":" + secondsLeft[0] + secondsLeft[1]
+              secondsLeft = secondsLeft - mins*60
+              return " " + mins + ":" + secondsLeft
             }
           }
 
