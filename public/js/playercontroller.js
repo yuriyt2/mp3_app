@@ -61,7 +61,7 @@
           id: "song",
           url: '',
           onfinish: function(){
-
+          console.log(playList.indexOf(currentSong))
           if (playList.indexOf(currentSong)+1 === playlist.length){
             assignCurrentSong(playList[0])
           }else{
@@ -75,20 +75,19 @@
 
           var timeDisplay = function(num){
             var secondsLeft = soundObject.durationEstimate - num
+            console.log(secondsLeft)
             if (secondsLeft < 60000){
-              secondsLeft = toString(secondsLeft)
-              return "0:" + secondsLeft[0]+secondsLeft[1]
+              secondsLeft = secondsLeft.toString()
+              return " 0:" + secondsLeft[0] + secondsLeft[1]
             }
             else if (secondsLeft < 360000){
               var mins = secondsLeft % 60000
-              secondsLeft = toString(secondsLeft)
+              secondsLeft = secondsLeft.toString()
               return mins + ":" + secondsLeft[0] + secondsLeft[1]
             }
           }
 
           sendMessage([currentSong.artist + " - " + currentSong.title + timeDisplay(soundObject.position), currentSong.album])
-
-
           rotateImage()
         }
 

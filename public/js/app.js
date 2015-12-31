@@ -60,6 +60,7 @@ $deletePlaylist.on('click', function(){
 
 //++++++++++++++ Main App controls +++++++++++++++++++++++++++++++++++++++++++++++
 var sendMessage = function (array) {
+  $($messageField).empty()
   var messageOne = $('<h2>')
   var messageTwo = $('<h5>')
   messageOne.text(array[0])
