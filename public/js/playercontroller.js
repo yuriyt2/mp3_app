@@ -30,8 +30,8 @@
   })
   $("#forward, #forward-2").on('click', function(){
     //only go forward if there is another song ahead.
-    if (playList[playList.indexOf(currentSong)+1].tempUrl !== undefined){
-      soundObject.stop();
+    soundObject.stop();
+    if (playList[playList.indexOf(currentSong)+1] !== undefined){
       assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
     } else {
       assignCurrentSong(playList[0]);
