@@ -61,7 +61,9 @@
           id: "song",
           url: '',
           onfinish: function(){
-          console.log(playList.indexOf(currentSong) === playlist.length-1)
+          console.log(playList.indexOf(currentSong) == playlist.length-1)
+          console.log(playList.indexOf(currentSong))
+          console.log(playlist.length-1)
           if (playList.indexOf(currentSong) === playlist.length-1){
             assignCurrentSong(playList[0])
           }else{
