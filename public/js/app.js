@@ -29,20 +29,14 @@ $(muFasa).hide()
 
 //------ Onload function to assign events to all buttons ----------------------------
 $(function(){
-
 //+++++++++++Navbar Controls++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 //This button should only be used for new users or when a user's dropbox was updated with new songs.
 $updateSongs.on('click', getSongFileNames);
-
-
-
-
 //++++++++++++++ User interaction controls +++++++++++++++++++++++++++++++++++++++
 
 //adds a song to the playlist
 $addSongButton.on('click', function(){
-  var index = null
+  var index = null;
   userSongList.forEach(function(song){
     if (song.id == parseInt($songList.val())){
     index = userSongList.indexOf(song);
@@ -64,7 +58,7 @@ $deletePlaylist.on('click', function(){
 })
 //--------------------------------------------------------------------------------
 
-
+//++++++++++++++ Main App controls +++++++++++++++++++++++++++++++++++++++++++++++
 var sendMessage = function (array) {
   var messageOne = $('<h2>')
   var messageTwo = $('<h5>')
@@ -74,28 +68,7 @@ var sendMessage = function (array) {
   $($messageField).append(messageTwo)
 }
 
-
-
-
-var checkIfTokenWorks = function (tok) {
-
-    $.ajax({
-      url: 'https://api.dropboxapi.com/1/account/info',
-      dataType: "json",
-      method: 'GET',
-      headers: {'Authorization': 'Bearer ' + tok}
-    }).done(function(data){
-      if (data){
-        setName(data.display_name.split(" ")[0]);
-        loadLibrary(userSongList);
-      }else{
-        console.log("Token doesn't work")
-      }
-    }).fail(function(err) {
-      console.log(err);
-    })
-}
-
+//Set the user's name on the top nav bar
 var setName = function (name){
   $nameDiv.text(name)
 }
@@ -122,13 +95,12 @@ var updatePlaylist = function () {
   })
 
 }
+//--------------------------------------------------------------------------------
 
-
+//++++++++++++++ Update User Songs +++++++++++++++++++++++++++++++++++++++++++++++
 
 //This is the first step in adding songs to a user.  This is used to create an array
 //of all the filepaths to the songs a user uploaded to dropbox.
-
-
 var getSongFileNames = function () {
   console.log("get song names")
   getToken()
@@ -160,7 +132,6 @@ var makeSongObjects = function (array) {
 var addTempLinks = function (array,num){
   if (num == array.length-1){
     console.log('Temp links added!')
-    updateUserSongList(0)
   }else{
   var link = ""
   $.ajax({
@@ -172,11 +143,87 @@ var addTempLinks = function (array,num){
       console.log("link created" + data.url)
       array[num].tempUrl = data.url
       addTempLinks(array,num+1)
+      if (num == 2){
+        updateUserSongList(0)
+      }
   })
     .fail(function(err) {
       console.log(err);
   })
  }
+}
+
+//Read the ID3 tags and save the relevant track info for each song.
+var updateUserSongList = function (num) {
+  console.log("Update " + num)
+  if (num === songObjects.length-1){
+    saveUserSongs();
+    updateSongList();
+  }else if (songObjects[num].title !== null){
+    updateUserSongList(num+1);
+  } else {
+    var fileurl = songObjects[num].tempUrl;
+    ID3.loadTags(fileurl, function() {
+        tags = ID3.getAllTags(fileurl);
+        songObjects[num].title = tags.title;
+        songObjects[num].artist = tags.artist;
+        songObjects[num].album = tags.album;
+        updateUserSongList(num+1);
+    }, {
+        onError: function(reason) {
+          updateUserSongList(num+1);
+            }
+        })
+    }
+}
+
+//Save song data to db.  Array is sent as string to be JSON.parsed by server.
+var saveUserSongs = function () {
+  $.ajax({
+    url: "/users/" + loggedInUser._id,
+    method: "PUT",
+    data: {songs:JSON.stringify(songObjects)}
+  }).success(function(log){
+    console.log(log);
+    populateSongList()
+  }).fail(function(){
+    console.log("fail");
+  })
+}
+
+
+var updateSongList = function (){
+  userSongList.forEach(function(song){
+    var $song = $('<option value=' + song.id + '>');
+    $song.text(song.artist + " - " + song.title);
+    $songList.append($song);
+  })
+console.log("song list updated front end")
+}
+
+
+var populateSongList = function () {
+  $.ajax({
+    url: "/users/" + loggedInUser._id,
+    method: "GET",
+  }).success(function(data){
+    console.log(data);
+    userSongList = null;
+    userSongList = data[0].songs;
+    //sort songs by artist alphabetically
+      function compare(a,b) {
+        if (a.artist < b.artist){
+          return -1};
+        if (a.artist > b.artist){
+          return 1};
+        return 0;
+      }
+      userSongList = userSongList.sort(compare);
+
+    updateSongList();
+  }).fail(function(){
+    console.log("fail");
+  })
 }
 
 // Create new temp link and add song to playlist.
@@ -200,94 +247,18 @@ var makeNewTempLink = function (song) {
 }
 
 
-
-var updateUserSongList = function (num) {
-  console.log("Update " + num)
-  if (num === songObjects.length-1){
-    saveUserSongs()
-    updateSongList();
-  }else if (songObjects[num].title !== null){
-    updateUserSongList(num+1)
-  } else {
-    id3(songObjects[num].tempUrl, function(err, tags) {
-      if (err) {
-          updateUserSongList(num+1)
-      }else{
-          songObjects[num].title = tags.title;
-          songObjects[num].artist = tags.artist;
-          songObjects[num].year = tags.year;
-          songObjects[num].album = tags.album;
-          updateUserSongList(num+1)
-        }
-      })
-    }
-}
-
-//Save song data to db.  Array is sent as string to be JSON.parsed by server.
-var saveUserSongs = function () {
-  $.ajax({
-    url: "/users/" + loggedInUser._id,
-    method: "PUT",
-    data: {songs:JSON.stringify(songObjects)}
-  }).success(function(log){
-    console.log(log)
-    populateSongList()
-  }).fail(function(){
-    console.log("fail")
-  })
-}
-
-
-var updateSongList = function (){
-  userSongList.forEach(function(song){
-    var $song = $('<option value=' + song.id + '>');
-    $song.text(song.artist + " - " + song.title);
-    $songList.append($song);
-  })
-console.log("song list updated front end")
-}
-
-
-var populateSongList = function () {
-  $.ajax({
-    url: "/users/" + loggedInUser._id,
-    method: "GET",
-  }).success(function(data){
-    console.log(data)
-    userSongList = data[0].songs
-    //sort songs by artist alphabetically
-      function compare(a,b) {
-        if (a.artist < b.artist)
-          return -1;
-        if (a.artist > b.artist)
-          return 1;
-        return 0;
-      }
-      userSongList = userSongList.sort(compare);
-
-
-    updateSongList();
-  }).fail(function(){
-    console.log("fail");
-  })
-
-}
-
-
-
-
 var assignCurrentSong = function(song){
-  currentSong = song
+  currentSong = song;
 }
 
 var playSong = function(){
   soundObject.url = currentSong.tempUrl;
-  soundObject.togglePause()
+  soundObject.togglePause();
 }
 
 var removeSelectedSong = function(){
-  var songSelected = $playlistSelect.val()
-  var index = null
+  var songSelected = $playlistSelect.val();
+  var index = null;
   var deleteSongFromArray = function () {
     if (index !== null){
       playList.splice(index,1);
@@ -305,16 +276,15 @@ var removeSelectedSong = function(){
 
 var rotateImage = function () {
   $('#red-button').on('click', function(){
-    rotateImage = rotateImage2
+    rotateImage = rotateImage2;
   })
 }
 
 var rotateImage2 = function () {
-  $('#mufasa').attr('width',"125px")
-  setTimeout(function(){$(muFasa).show()},300)
-  $('#record').append(muFasa)
-  degrees += 90
-  $('#mufasa').css('transform','rotate('+ degrees +'deg)')
-  setTimeout(function(){$(muFasa).show($('#mufasa').remove())},3000)
-
+  $('#mufasa').attr('width',"125px");
+  setTimeout(function(){$(muFasa).show()},300);
+  $('#record').append(muFasa);
+  degrees += 90;
+  $('#mufasa').css('transform','rotate('+ degrees +'deg)');
+  setTimeout(function(){$(muFasa).show($('#mufasa').remove())},3000);
 }
