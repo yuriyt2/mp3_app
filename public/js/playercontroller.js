@@ -81,7 +81,7 @@
             } else if (secondsLeft < 60){
               return " 0:" + secondsLeft
             } else if (secondsLeft < 3600){
-              var mins = Math.round(secondsLeft / 60)
+              var mins = Math.floor(secondsLeft / 60)
               var secs = secondsLeft - mins*60
               if (secs < 10){
                 secs = "0" + secs
