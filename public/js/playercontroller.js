@@ -61,10 +61,8 @@
           id: "song",
           url: '',
           onfinish: function(){
-          console.log(playList.indexOf(currentSong) == playlist.length-1)
-          console.log(playList.indexOf(currentSong))
-          console.log(playlist.length-1)
-          if (playList.indexOf(currentSong) === playlist.length-1){
+          console.log(playList.indexOf(currentSong) === playList.length-1)
+          if (playList.indexOf(currentSong) === playList.length-1){
             assignCurrentSong(playList[0])
           }else{
           assignCurrentSong(playList[playList.indexOf(currentSong)+1]);
@@ -84,7 +82,7 @@
               return " 0:" + secondsLeft
             } else if (secondsLeft < 3600){
               var mins = Math.round(secondsLeft / 60)
-              var secs = secondsLeft % mins*60
+              var secs = secondsLeft - mins*60
               if (secs < 10){
                 secs = "0" + secs
               }
