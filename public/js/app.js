@@ -156,6 +156,7 @@ var addTempLinks = function (array,num){
 //Read the ID3 tags and save the relevant track info for each song.
 var updateUserSongList = function (num) {
   console.log("Update " + num)
+  sendMessage(["Updating song " + num + " out of " + songFileNames.length,"This process may take several minutes depending on the size of your song library."])
   if (num === songObjects.length-1){
     saveUserSongs();
     updateSongList();
@@ -211,14 +212,15 @@ var populateSongList = function () {
     console.log(data);
     userSongList = data[0].songs;
     //sort songs by artist alphabetically
-      function compare(a,b) {
-        if (a.artist < b.artist){
-          return -1};
-        if (a.artist > b.artist){
-          return 1};
-        return 0;
-      }
-      userSongList = userSongList.sort(compare);
+
+      userSongList = userSongList.sort(function(a,b) {
+          if (a.artist < b.artist){
+            return -1}
+          if (a.artist > b.artist){
+            return 1}
+          if (a.artist = b.artist){
+            return 0}
+        });
 
     updateSongList();
   }).fail(function(){

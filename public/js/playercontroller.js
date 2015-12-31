@@ -73,6 +73,22 @@
         whileplaying: function(){
           $("#position").val(soundObject.position/soundObject.durationEstimate * 100)
 
+          var timeDisplay = function(num){
+            var secondsLeft = soundObject.durationEstimate - num
+            if (secondsLeft < 60000){
+              secondsLeft = toString(secondsLeft)
+              return "0:" + secondsLeft[0]+secondsLeft[1]
+            }
+            else if (secondsLeft < 360000){
+              var mins = secondsLeft % 60000
+              secondsLeft = toString(secondsLeft)
+              return mins + ":" + secondsLeft[0] + secondsLeft[1]
+            }
+          }
+
+          sendMessage([currentSong.artist + " - " + currentSong.title + timeDisplay(soundObject.position), currentSong.album])
+
+
           rotateImage()
         }
 
