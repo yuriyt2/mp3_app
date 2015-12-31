@@ -212,10 +212,10 @@ var populateSongList = function () {
     userSongList = data[0].songs;
     //sort songs by artist alphabetically
       function compare(a,b) {
-        if (a.artist < b.artist);
-          return -1;
-        if (a.artist > b.artist);
-          return 1;
+        if (a.artist < b.artist){
+          return -1};
+        if (a.artist > b.artist){
+          return 1};
         return 0;
       }
       userSongList = userSongList.sort(compare);
