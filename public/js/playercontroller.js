@@ -74,7 +74,7 @@
           $("#position").val(soundObject.position/soundObject.durationEstimate * 100)
 
           var timeDisplay = function(num){
-            var secondsLeft = Math.round(soundObject.durationEstimate - num/1000)
+            var secondsLeft = Math.round((soundObject.durationEstimate - num)/1000)
             console.log(soundObject.position)
             console.log(soundObject.durationEstimate)
             if(secondsLeft < 10){
