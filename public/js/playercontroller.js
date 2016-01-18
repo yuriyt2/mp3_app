@@ -94,7 +94,6 @@
           }
 
           sendMessage([currentSong.artist + " - " + currentSong.title + timeDisplay(soundObject.position), currentSong.album])
-          rotateImage()
         }
 
         });

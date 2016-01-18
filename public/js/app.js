@@ -24,8 +24,6 @@ var songFileNames = []; //to be used to get filenames from dropbox
 var songObjects = [];   //to be used in the creation process of songs
 var soundObject = {};
 var degrees = 0;
-var muFasa = $('<img id=mufasa src="http://dash.ponychan.net/chan/files/src/136167943291.gif"/>')
-$(muFasa).hide()
 
 //------ Onload function to assign events to all buttons ----------------------------
 $(function(){
@@ -275,20 +273,4 @@ var removeSelectedSong = function(){
 })
   deleteSongFromArray();
   updatePlaylist();
-}
-
-
-var rotateImage = function () {
-  $('#red-button').on('click', function(){
-    rotateImage = rotateImage2;
-  })
-}
-
-var rotateImage2 = function () {
-  $('#mufasa').attr('width',"125px");
-  setTimeout(function(){$(muFasa).show()},300);
-  $('#record').append(muFasa);
-  degrees += 90;
-  $('#mufasa').css('transform','rotate('+ degrees +'deg)');
-  setTimeout(function(){$(muFasa).show($('#mufasa').remove())},3000);
 }
