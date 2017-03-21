@@ -25,7 +25,7 @@
 + JavaScript ID3 Reader
 
 ### Deployment URL
-[MP3 Trove](http://mp3trove.yuriyturetskiy.com/)
+[MP3 Trove](https://mp3trove.yuriyturetskiy.com/)
 
 ### Technical Details
 + To avoid frequent database access the app only accesses its MongoDB once, upon login, to acquire the user's song list.
