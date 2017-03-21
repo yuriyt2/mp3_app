@@ -34,12 +34,14 @@ mongoose.connect('mongodb://localhost/mp3App', function (err) {
 //set up port to run on
 //app.listen(3000,function(){console.log("Server Running on 3000")});
 
-var options = {
-  key: fs.readFileSync('server.key'),
-  cert: fs.readFileSync('server.crt')
+var sslPath = '/etc/letsencrypt/live/mp3trove.yuriyturetskiy.com/';
+
+var options = {  
+    key: fs.readFileSync(sslPath + 'privkey.pem'),
+    cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
-https.createServer(options, app).listen(3000);
+https.createServer(options, app).listen(443);
 
 // app.get('/user', function(res,req){
 //   req.sendfile(__dirname + "/public/login.html")
