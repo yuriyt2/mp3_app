@@ -30,7 +30,7 @@ mongoose.connect('mongodb://localhost/mp3App', function (err) {
 });
 
 //set up port to run on
-app.listen(3000,function(){console.log("Server Running on 3000")});
+app.listen(443,function(){console.log("Server Running on 443")});
 
 
 // app.get('/user', function(res,req){
