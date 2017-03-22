@@ -98,7 +98,7 @@ app.get('/users/:id', function(req, res) {
 
 //Update a user's songs.
   app.put('/users/:id', function (req, res) {
-    console.log(JSON.parse(req.body.songs))
+    if (req.body.songs) {
     User.findOneAndUpdate({
       _id:req.params.id
     }, {
@@ -107,7 +107,17 @@ app.get('/users/:id', function(req, res) {
       console.log(user);
       res.send("Songs successfully saved.");
     });
-  });
+    }else {
+      User.findOneAndUpdate({
+      _id:req.params.id
+    }, {
+       $set: {token: JSON.parse(req.body.token)}
+    }, function(err, user) {
+      console.log(user);
+      res.send("Token saved.");
+    }
+  })
+  
 
 
 
@@ -128,14 +138,15 @@ app.post('/sessions', function(req,res){
    }).exec(function(err, user) {
      console.log(user)
      if (user[0] === undefined){
-     res.send('User not found.')
-     console.log(req.session)}
-     else{
-     user[0].comparePassword(req.body.password, function(err, isMatch) {
+      res.send('User not found.')
+      console.log(req.session);
+     }else{
+      user[0].comparePassword(req.body.password, function(err, isMatch) {
        if (isMatch) {
          console.log("logged in");
-         console.log(user[0]._id)
+         console.log(user[0]._id);
          req.session.currentUser = user[0]._id;
+
          res.send(user);
          console.log("User is" + user)
          console.log(req.session)

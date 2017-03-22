@@ -116,6 +116,16 @@
   var getToken = function (){
     if (window.location.href.match('\access_token=(.+)\&t')){
     userToken = window.location.href.match('\access_token=(.+)\&t')[1];
+        $.post('/sessions', {
+        username : loggedInUser.username,
+        token : userToken
+        })
+      .success(function(res) {
+        console.log(res)
+      })
+      .fail(function(err) {
+        console.log(err)
+      })
     }else if (loggedInUser.token.length > 1) {
     userToken = loggedInUser.token;
     }else{
