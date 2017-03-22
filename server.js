@@ -115,8 +115,9 @@ app.get('/users/:id', function(req, res) {
     }, function(err, user) {
       console.log(user);
       res.send("Token saved.");
-    }
-  })
+    })
+  }
+})
   
 
 
@@ -146,7 +147,6 @@ app.post('/sessions', function(req,res){
          console.log("logged in");
          console.log(user[0]._id);
          req.session.currentUser = user[0]._id;
-
          res.send(user);
          console.log("User is" + user)
          console.log(req.session)
