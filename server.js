@@ -43,6 +43,13 @@ var options = {
 
 https.createServer(options, app).listen(443);
 
+//redirect from HTTP to HTTPS
+var http = app.createServer();
+http.get('*',function(req,res){  
+    res.redirect('https://mp3trove.yuriyturetskiy.com'+req.url)
+})
+http.listen(8080);
+
 
 // app.get('/user', function(res,req){
 //   req.sendfile(__dirname + "/public/login.html")
