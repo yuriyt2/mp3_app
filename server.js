@@ -7,7 +7,6 @@ var mongoose = require('mongoose');
 var app = express();
 var fs = require('fs');
 var https = require('https');
-var http = express();
 
 app.use(bodyParser({limit: '50mb'})); //allows large updates when refreshing a user's song list
 
@@ -45,10 +44,11 @@ var options = {
 https.createServer(options, app).listen(443);
 
 //redirect from HTTP to HTTPS
-http.get('*',function(req,res){  
-    res.redirect('https://mp3trove.yuriyturetskiy.com'+req.url)
-})
-http.listen(80);
+var http = require('http');
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(80);
 
 
 // app.get('/user', function(res,req){
