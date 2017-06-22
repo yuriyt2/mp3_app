@@ -48,7 +48,7 @@ https.createServer(options, app).listen(443);
 http.get('*',function(req,res){  
     res.redirect('https://mp3trove.yuriyturetskiy.com'+req.url)
 })
-http.listen(8080);
+http.listen(80);
 
 
 // app.get('/user', function(res,req){
