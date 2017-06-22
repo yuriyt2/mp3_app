@@ -41,8 +41,6 @@ var options = {
     cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
-https.createServer(options, app).listen(443);
-
 //redirect from HTTP to HTTPS
 var http = require('http');
 http.createServer(function (req, res) {
@@ -50,6 +48,7 @@ http.createServer(function (req, res) {
     res.end();
 }).listen(80);
 
+https.createServer(options, app).listen(443);
 
 // app.get('/user', function(res,req){
 //   req.sendfile(__dirname + "/public/login.html")
