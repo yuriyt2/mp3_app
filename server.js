@@ -42,6 +42,9 @@ var options = {
 };
 
 https.createServer(options, app).listen(443);
+app.listen(80, function (req,res){
+  res.redirect("https://mp3trove.yuriyturetskiy.com");
+})
 
 // app.get('/user', function(res,req){
 //   req.sendfile(__dirname + "/public/login.html")
